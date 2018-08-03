@@ -1,0 +1,51 @@
+#!/bin/bash
+
+lookup_common_name() {
+  if [ -f /var/db/ovpn/connections/${ADDRESS} ]; then
+    cat /var/db/ovpn/connections/${ADDRESS}
+  fi
+}
+
+save_connection() {
+  if [ ! -f /var/db/ovpn/connections/${ADDRESS} ]; then
+    echo "$name" > /var/db/ovpn/connections/${ADDRESS}
+  fi
+}
+
+delete_connection() {
+  if [ -f /var/db/ovpn/connections/${ADDRESS} ]; then
+    rm /var/db/ovpn/connections/${ADDRESS}
+  fi
+}
+
+add_iptables_rules() {
+  if [ -f /var/db/ovpn/users/${COMMON_NAME} ]; then
+    . /var/db/ovpn/users/${COMMON_NAME}
+  fi
+
+}
+
+drop_iptables_rules() {
+
+}
+
+OPERATION=$1
+ADDRESS=$2
+if [ ${OPERATION} = "delete" ]; then
+  COMMON_NAME=$(lookup_common_name)
+else
+  COMMON_NAME=$3
+fi
+
+case $OPERATION in
+  add)
+    save_connection
+    add_iptables_rules
+    ;;
+  update)
+    ;;
+  delete)
+    delete_connection
+    drop_iptables_rules
+    ;;
+esac
