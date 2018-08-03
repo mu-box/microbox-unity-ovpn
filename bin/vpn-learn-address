@@ -23,10 +23,22 @@ add_iptables_rules() {
     . /var/db/ovpn/users/${COMMON_NAME}
   fi
 
+  if ! iptables -C FORWARD -s ${ADDRESS} -j FW-${COMMON_NAME} ; then
+    iptables -N FW-${COMMON_NAME}
+    iptables -A FW-${COMMON_NAME} -j RETURN
+    iptables -A FORWARD -s ${ADDRESS} -j FW-${COMMON_NAME}
+    iptables -A FORWARD -d ${ADDRESS} -j FW-${COMMON_NAME}
+  fi
+
 }
 
 drop_iptables_rules() {
-
+  if iptables -C FORWARD -s ${ADDRESS} -j FW-${COMMON_NAME} ; then
+    iptables -D FORWARD -s ${ADDRESS} -j FW-${COMMON_NAME}
+    iptables -D FORWARD -d ${ADDRESS} -j FW-${COMMON_NAME}
+    iptables -F FW-${COMMON_NAME}
+    iptables -X FW-${COMMON_NAME}
+  fi
 }
 
 OPERATION=$1
