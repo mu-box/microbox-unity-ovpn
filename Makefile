@@ -18,5 +18,5 @@ unity-ovpn.tar.gz: ${SOURCES}
 	rm -rf $${DIR}
 
 publish: unity-ovpn.tar.gz unity-ovpn.md5
-	aws s3 cp --acl public-read unity-ovpn.tar.gz s3://unity.nanobox.io/bootstrap/vpn/unity-ovpn.tar.gz; \
-	aws s3 cp --acl public-read unity-ovpn.md5 s3://unity.nanobox.io/bootstrap/vpn/unity-ovpn.md5;
+	aws s3 cp --acl public-read unity-ovpn.tar.gz s3://unity.microbox.cloud/bootstrap/vpn/unity-ovpn.tar.gz; \
+	aws s3 cp --acl public-read unity-ovpn.md5 s3://unity.microbox.cloud/bootstrap/vpn/unity-ovpn.md5;
